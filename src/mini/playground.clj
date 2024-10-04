@@ -34,13 +34,9 @@
 ;; (s/def :ex/non-small-vector-or-list (s/coll-of some? :kind (or list? vector?)))
 ;; (s/def :ex/non-small-vector-or-list (s/or some? :vector (s/coll-of :kind vector? :min-count 3)
 ;;                                           :list (s/coll-of :kind list? :min-count 3)))
-(s/def :ex/non-small-vector-or-list-non-neg-even (s/coll-of (s/and pos-int? even?) :kind (or list? vector?) :min-count 3))
-;; how do you give multiple types to a passeed keyword arg 
-;; Example -> :kind list? or vector?
+(s/def :ex/non-small-vector-or-list-non-neg-even (s/coll-of (s/and pos-int? even?) :kind #(or (list? %) (vector? %)) :min-count 3))
 
 (s/valid? :ex/non-small-vector-or-list-non-neg-even '[2 4 6]) ; True
-;;=> false
-(s/explain :ex/non-small-vector-or-list-non-neg-even '[2 4 6])
 (s/valid? :ex/non-small-vector-or-list-non-neg-even '[-2 -4 6]) ; False because it has negative numbers
 (s/valid? :ex/non-small-vector-or-list-non-neg-even '[2 4]) ; False because less than 3 elements
 (s/valid? :ex/non-small-vector-or-list-non-neg-even '(2 4 6)) ; True
