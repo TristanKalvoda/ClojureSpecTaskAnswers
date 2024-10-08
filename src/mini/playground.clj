@@ -103,6 +103,14 @@
 ;;   Couldn't satisfy such-that predicate after 100 tries.
 
 ;; A sequence of strings, each string of even length. 
+(s/def :ex/seq-evenlength-strings (s/and seqable?
+                                     (s/coll-of (s/and string? #(even? (count %))))))
+(s/valid? :ex/seq-evenlength-strings '("hi" "even")); True
+(s/valid? :ex/seq-evenlength-strings '("" "" "even")); True
+(s/valid? :ex/seq-evenlength-strings '("odd" "false")); False, strings have odd length
+(s/valid? :ex/seq-evenlength-strings '(1)); False, sequence of numbers
+(s/valid? :ex/seq-evenlength-strings '(:kw)); False, sequence of keywords
+
 ;; A sequence that has a keyword :hello as one of its elements. 
 ;; A sequence of numbers and strings in which every number is followed by a string. For instance, [“a” “b” 1 “c”] would be valid. An empty sequence works, so does a sequence of any number of strings.
 ;; A non-empty sequence of numbers and strings that starts with a number in which every number is followed by at least one string.
