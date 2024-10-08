@@ -50,8 +50,11 @@
 ;; Note: map-of https://clojuredocs.org/clojure.spec.alpha/map-of
 ;; map-of Function Signature: (map-of kpred vpred & opts)
 ;; (s/def :ex/three-kvpair-map (s/map-of #(and string? #(%.length < 0)) #(if %))) original attempt
+(defn not-nil-or-false?[x]
+  (not (or nil? false?)))
+(not-nil-or-false? false)
 (s/def :ex/three-kvpair-map (s/map-of (s/and string? #(<= (count %) 3)) ; #(<= (count %) 3) checks that string length is <= 3
-                                      some?
+                                      not-nil-or-false?
                                       :count 3))
 (s/valid? :ex/three-kvpair-map {"abc" 123 "xyz" 987 "hi!" "hello"}); True
 (s/valid? :ex/three-kvpair-map {"3rd" 3 "2nd" 2 "1st" 1}); True
