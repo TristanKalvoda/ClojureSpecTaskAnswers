@@ -83,3 +83,21 @@
 
 (gen/generate (s/gen :ex/two-strings-number-tuple))
 
+;; Sequences:
+;; A sequence of an odd number of keywords.  
+(s/def :ex/seq-oddkw (s/and seqable? 
+                            (s/coll-of keyword?) 
+                            #(odd? (count %))))
+
+(s/valid? :ex/seq-oddkw '(:one :two :three)); True
+(s/valid? :ex/seq-oddkw '(:one)); True
+(s/valid? :ex/seq-oddkw [:one]); True
+(s/valid? :ex/seq-oddkw '(:one :two)); False, even number of keywords
+(gen/generate (s/gen :ex/seq-oddkw))
+;;=> Execution error (ExceptionInfo) at clojure.test.check.generators/such-that-helper (generators.cljc:320).
+;;   Couldn't satisfy such-that predicate after 100 tries.
+
+;; A sequence of strings, each string of even length. 
+;; A sequence that has a keyword :hello as one of its elements. 
+;; A sequence of numbers and strings in which every number is followed by a string. For instance, [“a” “b” 1 “c”] would be valid. An empty sequence works, so does a sequence of any number of strings.
+;; A non-empty sequence of numbers and strings that starts with a number in which every number is followed by at least one string.
