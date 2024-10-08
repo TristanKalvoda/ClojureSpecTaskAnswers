@@ -63,11 +63,13 @@
 (s/valid? :ex/three-kvpair-map {"a" 1 "b" 2 "c" 3 "d" 4}); false more than 3 kvpairs
 (s/valid? :ex/three-kvpair-map #{"abc" 123 "xyz" 987 "hi!" "hello"}); false not a map
 (gen/generate (s/gen :ex/three-kvpair-map))
-
 ;; A map in which keys are one of :a, :b, :c, :d, :e and keys are keywords different from these keys.
 ;; I will move forward under the assumption it means valies are keywords different than these keys.
 (s/def :ex/abcde-key-map (s/map-of #{:a :b :c :d :e}
-                                   (s/and keyword? #(not (contains? #{:a :b :c :d :e} %) ))))
+                                   (s/and keyword? #(not (contains? #{:a :b :c :d :e} %) )))) ;; Can remove contains?
+;;Updated to remove contains?
+(s/def :ex/abcde-key-map (s/map-of #{:a :b :c :d :e}
+                                   (s/and keyword? #(not (#{:a :b :c :d :e} %)))))
 (s/valid? :ex/abcde-key-map {:a :apple :b :banana :c :cherry}); true
 (s/valid? :ex/abcde-key-map {:d :daisy :e :edelweiss}); true
 (s/valid? :ex/abcde-key-map {:d :e}); false :e is one of the key values
