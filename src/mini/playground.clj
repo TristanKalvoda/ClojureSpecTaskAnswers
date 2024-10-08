@@ -74,6 +74,12 @@
 
 
 ;; A tuple of two strings and a number (in that order).
-;; map
-(s/def )
-(s/tuple)
+(s/def :ex/two-strings-number-tuple (s/tuple string? string? number?))
+
+(s/valid? :ex/two-strings-number-tuple ["string1" "string2" 1]); True
+(s/valid? :ex/two-strings-number-tuple ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" -20]); True
+(s/valid? :ex/two-strings-number-tuple [:keyword "string1" 1]); False, has a keyword instead of a string
+(s/valid? :ex/two-strings-number-tuple '("a" "b" 1)); False, not a tuple
+
+(gen/generate (s/gen :ex/two-strings-number-tuple))
+
