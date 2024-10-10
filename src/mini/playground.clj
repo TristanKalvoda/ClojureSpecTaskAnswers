@@ -111,6 +111,18 @@
 (s/valid? :ex/seq-evenlength-strings '(1)); False, sequence of numbers
 (s/valid? :ex/seq-evenlength-strings '(:kw)); False, sequence of keywords
 
-;; A sequence that has a keyword :hello as one of its elements. 
+;; A sequence that has a keyword :hello as one of its elements.
+;; (s/def :ex/hellokw-seq (s/and seqable?
+;;                               (s/coll-of any?)
+;;                               #(contains? % :hello)))
+(s/def :ex/hellokw-seq (s/and seqable?
+                              (s/coll-of any?)
+                              #(some #{:hello} %)))
+(s/explain :ex/hellokw-seq '(1 2 3 :hello)); Success
+(s/valid? :ex/hellokw-seq '(1 2 3 :hello)); True
+(s/valid? :ex/hellokw-seq '[:hello]); True
+(s/valid? :ex/hellokw-seq '[]); False
+(s/valid? :ex/hellokw-seq '("hello")); False
+
 ;; A sequence of numbers and strings in which every number is followed by a string. For instance, [“a” “b” 1 “c”] would be valid. An empty sequence works, so does a sequence of any number of strings.
 ;; A non-empty sequence of numbers and strings that starts with a number in which every number is followed by at least one string.
